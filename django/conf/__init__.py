@@ -55,7 +55,12 @@ class LazySettings(LazyObject):
         if self._wrapped is empty:
             self._setup(name)
         val = getattr(self._wrapped, name)
-        self.__dict__[name] = val
+        # MJG: REMOVE SETTINGS CACHING
+        # Caching breaks the use of thread locals to give a setting (e.g. SITE_ID)
+        # a different value on each thread--not an ideal practice, 
+        # but existing in some code bases.
+        # THE FOLLOWING LINE WAS COMMENTED OUT:
+        # self.__dict__[name] = val
         return val
 
     def __setattr__(self, name, value):
